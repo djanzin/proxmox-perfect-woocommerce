@@ -470,6 +470,10 @@ WC_FLAGS=(
 [[ "$INSTALL_PMA"   == true ]] && WC_FLAGS+=(--phpmyadmin)
 [[ "$INSTALL_FB"    == true ]] && WC_FLAGS+=(--filebrowser)
 
+# curl + ca-certificates sicherstellen (im frischen LXC Template nicht vorinstalliert)
+pct exec "$CT_ID" -- bash -c \
+  "apt-get update -qq && apt-get install -y -qq curl ca-certificates"
+
 # Script in den Container laden
 pct exec "$CT_ID" -- bash -c \
   "curl -fsSL https://raw.githubusercontent.com/djanzin/perfect-woocommerce/main/install-woocommerce.sh -o /tmp/install-wc.sh && chmod +x /tmp/install-wc.sh"
