@@ -480,21 +480,23 @@ WC_FLAGS=(
 # Host-LANG aufruft und fehlschlägt — Locale erst nach der Installation konfigurieren
 pct exec "$CT_ID" -- bash -c \
   "DEBIAN_FRONTEND=noninteractive LANG=C LC_ALL=C apt-get update -qq && \
-   DEBIAN_FRONTEND=noninteractive LANG=C LC_ALL=C apt-get install -y -qq curl ca-certificates locales && \
-   locale-gen en_US.UTF-8 && \
-   printf 'LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\n' > /etc/default/locale"
+   DEBIAN_FRONTEND=noninteractive LANG=C LC_ALL=C apt-get install -y -qq curl ca-certificates locales sudo && \
+   sed -i 's/^# *en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+   locale-gen && \
+   echo 'LANG=en_US.UTF-8' > /etc/default/locale"
 
 # Script in den Container laden
 pct exec "$CT_ID" -- bash -c \
   "curl -fsSL https://raw.githubusercontent.com/djanzin/perfect-woocommerce/main/install-woocommerce.sh -o /tmp/install-wc.sh && chmod +x /tmp/install-wc.sh"
 
 # WooCommerce installieren
-# Flags via printf %q korrekt escapen — pct exec übergibt Arrays sonst mit falschen Leerzeichen
-CMD="bash /tmp/install-wc.sh"
-for _flag in "${WC_FLAGS[@]}"; do
-  CMD+=" $(printf '%q' "$_flag")"
-done
-pct exec "$CT_ID" -- bash -c "export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8; $CMD"
+# systemd-run führt den Install-Script als transiente systemd-Unit aus — dadurch hat der Prozess
+# vollen D-Bus-Zugriff und deb-systemd-invoke kann systemctl korrekt aufrufen (Debian 13 Fix).
+pct exec "$CT_ID" -- \
+  systemd-run --wait --pipe \
+  --setenv "LANG=en_US.UTF-8" \
+  --setenv "PATH=/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/bin:/sbin" \
+  -- /bin/bash /tmp/install-wc.sh "${WC_FLAGS[@]}"
 
 # =============================================================================
 # ZUGANGSDATEN AUF PROXMOX-HOST KOPIEREN
