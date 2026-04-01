@@ -468,6 +468,7 @@ WC_FLAGS=(
   --currency     "$WC_CURRENCY"
   --country      "$WC_COUNTRY"
   --english
+  --yes
 )
 [[ "$INSTALL_SSL"   == true ]] && WC_FLAGS+=(--ssl)
 [[ "$REVERSE_PROXY" == true ]] && WC_FLAGS+=(--reverse-proxy)
