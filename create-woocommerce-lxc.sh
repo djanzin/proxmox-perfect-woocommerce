@@ -59,7 +59,7 @@ if [[ "$ENGLISH" == true ]]; then
   L_PROMPT_CORES="CPU cores [2]"
   L_PROMPT_RAM="RAM in MB [2048]"
   L_PROMPT_DISK="Disk size in GB [20]"
-  L_PROMPT_STORAGE="Proxmox storage (e.g. local-lvm) [local-lvm]"
+  L_PROMPT_STORAGE="Selection or storage name"
   L_PROMPT_BRIDGE="Network bridge [vmbr0]"
   L_PROMPT_MAC="MAC address (e.g. BC:24:11:AA:BB:CC, leave empty for auto)"
   L_PROMPT_IP_MODE="Network: 1) DHCP  2) Static IP [1]"
@@ -137,7 +137,7 @@ else
   L_PROMPT_CORES="CPU-Kerne [2]"
   L_PROMPT_RAM="RAM in MB [2048]"
   L_PROMPT_DISK="Disk-Größe in GB [20]"
-  L_PROMPT_STORAGE="Proxmox Storage (z.B. local-lvm) [local-lvm]"
+  L_PROMPT_STORAGE="Auswahl oder Storage-Name"
   L_PROMPT_BRIDGE="Netzwerk-Bridge [vmbr0]"
   L_PROMPT_MAC="MAC-Adresse (z.B. BC:24:11:AA:BB:CC, leer lassen für automatisch)"
   L_PROMPT_IP_MODE="Netzwerk: 1) DHCP  2) Statische IP [1]"
@@ -239,8 +239,23 @@ read -rp "$(echo -e "${BOLD}${L_PROMPT_DISK}:${RESET} ")" CT_DISK
 CT_DISK="${CT_DISK:-20}"
 
 # Storage
-read -rp "$(echo -e "${BOLD}${L_PROMPT_STORAGE}:${RESET} ")" CT_STORAGE
-CT_STORAGE="${CT_STORAGE:-local-lvm}"
+# Verfügbare Storages mit rootdir-Unterstützung ermitteln und anzeigen
+mapfile -t _STORAGES < <(pvesm status --content rootdir 2>/dev/null | awk 'NR>1 {print $1}')
+if [[ ${#_STORAGES[@]} -gt 0 ]]; then
+  echo -e "${BOLD}${L_STORAGE_LABEL}:${RESET}"
+  for i in "${!_STORAGES[@]}"; do
+    echo -e "  $((i+1))) ${CYAN}${_STORAGES[$i]}${RESET}"
+  done
+  read -rp "$(echo -e "${BOLD}${L_PROMPT_STORAGE}:${RESET} ")" _storage_input
+  if [[ "$_storage_input" =~ ^[0-9]+$ ]] && (( _storage_input >= 1 && _storage_input <= ${#_STORAGES[@]} )); then
+    CT_STORAGE="${_STORAGES[$(( _storage_input - 1 ))]}"
+  else
+    CT_STORAGE="${_storage_input:-${_STORAGES[0]}}"
+  fi
+else
+  read -rp "$(echo -e "${BOLD}${L_PROMPT_STORAGE}:${RESET} ")" CT_STORAGE
+  CT_STORAGE="${CT_STORAGE:-local-lvm}"
+fi
 
 # Bridge
 read -rp "$(echo -e "${BOLD}${L_PROMPT_BRIDGE}:${RESET} ")" CT_BRIDGE
