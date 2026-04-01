@@ -322,13 +322,17 @@ WP_LANG="${WP_LANG:-de_DE}"
 read -rp "$(echo -e "${BOLD}${L_PROMPT_TIMEZONE}:${RESET} ")" WP_TIMEZONE
 WP_TIMEZONE="${WP_TIMEZONE:-Europe/Berlin}"
 
-# SSL
-read -rp "$(echo -e "${BOLD}${L_PROMPT_SSL}:${RESET} ")" _ssl
-[[ "${_ssl,,}" == "j" || "${_ssl,,}" == "y" ]] && INSTALL_SSL=true || INSTALL_SSL=false
-
 # Reverse Proxy
 read -rp "$(echo -e "${BOLD}${L_PROMPT_REVERSEPROXY}:${RESET} ")" _rp
 [[ "${_rp,,}" == "j" || "${_rp,,}" == "y" ]] && REVERSE_PROXY=true || REVERSE_PROXY=false
+
+# SSL (nur fragen wenn kein Reverse Proxy)
+if [[ "$REVERSE_PROXY" == false ]]; then
+  read -rp "$(echo -e "${BOLD}${L_PROMPT_SSL}:${RESET} ")" _ssl
+  [[ "${_ssl,,}" == "j" || "${_ssl,,}" == "y" ]] && INSTALL_SSL=true || INSTALL_SSL=false
+else
+  INSTALL_SSL=false
+fi
 
 # phpMyAdmin
 read -rp "$(echo -e "${BOLD}${L_PROMPT_PHPMYADMIN}:${RESET} ")" _pma
