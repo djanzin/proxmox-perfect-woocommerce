@@ -470,16 +470,22 @@ WC_FLAGS=(
 [[ "$INSTALL_PMA"   == true ]] && WC_FLAGS+=(--phpmyadmin)
 [[ "$INSTALL_FB"    == true ]] && WC_FLAGS+=(--filebrowser)
 
-# curl + ca-certificates sicherstellen (im frischen LXC Template nicht vorinstalliert)
+# Locale + curl + ca-certificates sicherstellen (im frischen LXC Template nicht vorinstalliert)
 pct exec "$CT_ID" -- bash -c \
-  "apt-get update -qq && apt-get install -y -qq curl ca-certificates"
+  "apt-get update -qq && apt-get install -y -qq curl ca-certificates locales && \
+   locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8"
 
 # Script in den Container laden
 pct exec "$CT_ID" -- bash -c \
   "curl -fsSL https://raw.githubusercontent.com/djanzin/perfect-woocommerce/main/install-woocommerce.sh -o /tmp/install-wc.sh && chmod +x /tmp/install-wc.sh"
 
-# WooCommerce installieren (Flags als Array übergeben)
-pct exec "$CT_ID" -- bash /tmp/install-wc.sh "${WC_FLAGS[@]}"
+# WooCommerce installieren
+# Flags via printf %q korrekt escapen — pct exec übergibt Arrays sonst mit falschen Leerzeichen
+CMD="bash /tmp/install-wc.sh"
+for _flag in "${WC_FLAGS[@]}"; do
+  CMD+=" $(printf '%q' "$_flag")"
+done
+pct exec "$CT_ID" -- bash -c "$CMD"
 
 # =============================================================================
 # ZUGANGSDATEN AUF PROXMOX-HOST KOPIEREN
