@@ -476,9 +476,11 @@ WC_FLAGS=(
 [[ "$INSTALL_FB"    == true ]] && WC_FLAGS+=(--filebrowser)
 
 # Locale + curl + ca-certificates sicherstellen (im frischen LXC Template nicht vorinstalliert)
+# update-locale validiert gegen die aktuelle Session — direkt in /etc/default/locale schreiben statt update-locale
 pct exec "$CT_ID" -- bash -c \
   "apt-get update -qq && apt-get install -y -qq curl ca-certificates locales && \
-   locale-gen en_US.UTF-8 && update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8"
+   locale-gen en_US.UTF-8 && \
+   printf 'LANG=en_US.UTF-8\nLC_ALL=en_US.UTF-8\n' > /etc/default/locale"
 
 # Script in den Container laden
 pct exec "$CT_ID" -- bash -c \
@@ -490,7 +492,7 @@ CMD="bash /tmp/install-wc.sh"
 for _flag in "${WC_FLAGS[@]}"; do
   CMD+=" $(printf '%q' "$_flag")"
 done
-pct exec "$CT_ID" -- bash -c "$CMD"
+pct exec "$CT_ID" -- bash -c "export LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8; $CMD"
 
 # =============================================================================
 # ZUGANGSDATEN AUF PROXMOX-HOST KOPIEREN
