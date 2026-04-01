@@ -20,7 +20,7 @@ Everything is configured interactively — no manual editing required.
 
 ### Requirements
 
-- Proxmox VE 8.x
+- Proxmox VE 8+
 - Internet access on the Proxmox host
 - A domain name pointing to the server (required for SSL)
 
@@ -109,7 +109,7 @@ Alles wird interaktiv konfiguriert — kein manuelles Editieren nötig.
 
 ### Voraussetzungen
 
-- Proxmox VE 8.x
+- Proxmox VE 8+
 - Internetzugang auf dem Proxmox-Host
 - Ein Domainname der auf den Server zeigt (erforderlich für SSL)
 
