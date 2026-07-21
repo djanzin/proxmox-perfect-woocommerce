@@ -2,7 +2,7 @@
 # =============================================================================
 #  WooCommerce LXC Creator for Proxmox VE
 #  Creates an unprivileged LXC (Ubuntu 24.04 or Debian 13) and installs
-#  WooCommerce inside it using djanzin/perfect-woocommerce
+#  WooCommerce inside it using greecro/perfect-woocommerce
 # =============================================================================
 # Usage:
 #   bash create-woocommerce-lxc.sh
@@ -487,7 +487,7 @@ pct exec "$CT_ID" -- bash -c \
 
 # Script in den Container laden
 pct exec "$CT_ID" -- bash -c \
-  "curl -fsSL https://raw.githubusercontent.com/djanzin/perfect-woocommerce/main/install-woocommerce.sh -o /tmp/install-wc.sh && chmod +x /tmp/install-wc.sh"
+  "curl -fsSL https://raw.githubusercontent.com/greecro/perfect-woocommerce/main/install-woocommerce.sh -o /tmp/install-wc.sh && chmod +x /tmp/install-wc.sh"
 
 # WooCommerce installieren
 # systemd-run führt den Install-Script als transiente systemd-Unit aus — dadurch hat der Prozess

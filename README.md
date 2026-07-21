@@ -14,7 +14,7 @@ One script to create a Proxmox LXC container and install a production-ready WooC
 
 ### What it does
 
-A single bash script that runs on your **Proxmox VE host**, creates an unprivileged LXC container (Ubuntu 24.04 LTS or Debian 13 Trixie), and automatically installs a hardened, high-performance WooCommerce shop inside it using [djanzin/perfect-woocommerce](https://github.com/djanzin/perfect-woocommerce).
+A single bash script that runs on your **Proxmox VE host**, creates an unprivileged LXC container (Ubuntu 24.04 LTS or Debian 13 Trixie), and automatically installs a hardened, high-performance WooCommerce shop inside it using [greecro/perfect-woocommerce](https://github.com/greecro/perfect-woocommerce).
 
 Everything is configured interactively — no manual editing required.
 
@@ -29,7 +29,7 @@ Everything is configured interactively — no manual editing required.
 Run this **on your Proxmox host**:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/djanzin/proxmox-perfect-woocommerce/main/create-woocommerce-lxc.sh -o /tmp/create-wc-lxc.sh && bash /tmp/create-wc-lxc.sh
+curl -fsSL https://raw.githubusercontent.com/greecro/proxmox-perfect-woocommerce/main/create-woocommerce-lxc.sh -o /tmp/create-wc-lxc.sh && bash /tmp/create-wc-lxc.sh
 ```
 
 ### What the script asks for
@@ -93,7 +93,7 @@ Access your shop:
 
 ### Based on
 
-This script uses [djanzin/perfect-woocommerce](https://github.com/djanzin/perfect-woocommerce) for the WooCommerce installation inside the container.
+This script uses [greecro/perfect-woocommerce](https://github.com/greecro/perfect-woocommerce) for the WooCommerce installation inside the container.
 
 <a href="https://www.buymeacoffee.com/djanzin"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=%E2%98%95&slug=djanzin&button_colour=00354d&font_colour=ffffff&font_family=Cookie&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
 
@@ -103,7 +103,7 @@ This script uses [djanzin/perfect-woocommerce](https://github.com/djanzin/perfec
 
 ### Was es macht
 
-Ein einzelnes Bash-Script, das auf dem **Proxmox VE Host** ausgeführt wird, einen unprivilegierten LXC Container (Ubuntu 24.04 LTS oder Debian 13 Trixie) erstellt und darin automatisch einen abgesicherten, leistungsstarken WooCommerce-Shop installiert — basierend auf [djanzin/perfect-woocommerce](https://github.com/djanzin/perfect-woocommerce).
+Ein einzelnes Bash-Script, das auf dem **Proxmox VE Host** ausgeführt wird, einen unprivilegierten LXC Container (Ubuntu 24.04 LTS oder Debian 13 Trixie) erstellt und darin automatisch einen abgesicherten, leistungsstarken WooCommerce-Shop installiert — basierend auf [greecro/perfect-woocommerce](https://github.com/greecro/perfect-woocommerce).
 
 Alles wird interaktiv konfiguriert — kein manuelles Editieren nötig.
 
@@ -118,7 +118,7 @@ Alles wird interaktiv konfiguriert — kein manuelles Editieren nötig.
 Diesen Befehl **auf dem Proxmox-Host** ausführen:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/djanzin/proxmox-perfect-woocommerce/main/create-woocommerce-lxc.sh -o /tmp/create-wc-lxc.sh && bash /tmp/create-wc-lxc.sh
+curl -fsSL https://raw.githubusercontent.com/greecro/proxmox-perfect-woocommerce/main/create-woocommerce-lxc.sh -o /tmp/create-wc-lxc.sh && bash /tmp/create-wc-lxc.sh
 ```
 
 ### Was das Script abfragt
@@ -182,7 +182,7 @@ Shop aufrufen:
 
 ### Basiert auf
 
-Dieses Script verwendet [djanzin/perfect-woocommerce](https://github.com/djanzin/perfect-woocommerce) für die WooCommerce-Installation im Container.
+Dieses Script verwendet [greecro/perfect-woocommerce](https://github.com/greecro/perfect-woocommerce) für die WooCommerce-Installation im Container.
 
 <a href="https://www.buymeacoffee.com/djanzin"><img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=%E2%98%95&slug=djanzin&button_colour=00354d&font_colour=ffffff&font_family=Cookie&outline_colour=ffffff&coffee_colour=FFDD00" /></a>
 
